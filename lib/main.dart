@@ -1,12 +1,9 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import './pregunta.dart';
 import './respuesta.dart';
+import 'resultadoencuesta.dart';
 
-//void main() {
-//  runApp(MiPrueba());
-//}
 void main() => runApp(const MiPrueba());
 
 class MiPrueba extends StatefulWidget {
@@ -22,6 +19,7 @@ class MiPrueba extends StatefulWidget {
 class _MiPruebaState extends State<MiPrueba> {
   var _preguntaIndex = 0;
   var _randomIndex = -1;
+  //create list of strings
 
   void _respuestaPregunta() {
     setState(() {
@@ -57,16 +55,29 @@ class _MiPruebaState extends State<MiPrueba> {
 
     var preguntas = [
       {
-        'textoPregunta': '¿Cual es su color favorito?',
-        'respuestas': ['Azul', 'Rojo', 'Verde', 'Morado'],
+        'textoPregunta': '¿Cuál es tu color favorito?',
+        'respuestas': ['Azul', 'Rojo', 'Verde', 'Morado', 'Amarillo'],
       },
       {
-        'textoPregunta': '¿Cual es su mascota favorita?',
+        'textoPregunta': '¿Cuál es tu mascota favorita?',
         'respuestas': ['Gato', 'Perro', 'Loro'],
       },
       {
-        'textoPregunta': '¿Cual es su equipo favorito?',
+        'textoPregunta': '¿Cuál es tu equipo favorito?',
         'respuestas': ['Francia', 'España', 'Brasil', 'Japon'],
+      },
+      {
+        'textoPregunta': '¿Eres mayor de edad?',
+        'respuestas': ['Sí', 'No'],
+      },
+      {
+        'textoPregunta': '¿Cuál es tu carrera favorita?',
+        'respuestas': [
+          'Tecnologías de la información',
+          'Mecatrónica',
+          'Desarrollo de Negocios',
+          'Quiero darme de baja',
+        ],
       },
     ];
     return MaterialApp(
@@ -76,30 +87,20 @@ class _MiPruebaState extends State<MiPrueba> {
         ),
         body: Column(
           children: [
-            if (_preguntaIndex < preguntas.length)
+            if (_preguntaIndex < preguntas.length) ...[
               Pregunta(preguntas[_preguntaIndex]['textoPregunta'] as String),
-            if (_preguntaIndex < preguntas.length)
               ...(preguntas[_preguntaIndex]['respuestas'] as List<String>)
                   .map((respuesta) {
                 if (_preguntaIndex == 0) {
                   _randomIndex++;
-                      
                 } else {
                   _randomIndex = Random().nextInt(colores.length);
                 }
                 return Respuesta(
                     _respuestaPregunta, respuesta, colores[_randomIndex]);
               }).toList(),
-            if (_preguntaIndex >= preguntas.length)
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(30),
-                child: const Text(
-                  'No hay mas preguntas',
-                  style: TextStyle(fontSize: 28),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+            ] else
+              ResultadoEncuesta(Respuesta.getResultados(), preguntas),
           ],
         ),
       ),
